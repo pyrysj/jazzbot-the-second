@@ -1,0 +1,23 @@
+{
+  "name": "jazzbot-the-second",
+  "version": "0.0.1",
+  "description": "A bot for discord that plays music",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pyrysj/jazzbot-the-second.git"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "pyrysj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pyrysj/jazzbot-the-second/issues"
+  },
+  "homepage": "https://github.com/pyrysj/jazzbot-the-second#readme"
+}
