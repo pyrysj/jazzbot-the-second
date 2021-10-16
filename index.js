@@ -1,14 +1,24 @@
 // Require the necessary discord.js classes
 const { Client, Intents } = require('discord.js');
 const { token } = require('./config.json');
-require('./musicPlayer.js');
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
+// MusicPlayer class here untill i figure out how to make it play ball with a seperate file
+
+class MusicPlayer {
+	test() {
+		console.log('hello world!');
+	}
+}
+
+const mPlayer = new MusicPlayer;
+
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
 	console.log('Ready!');
+	mPlayer.test();
 });
 
 // Login to Discord with your client's token

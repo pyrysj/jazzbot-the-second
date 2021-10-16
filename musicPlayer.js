@@ -1,5 +1,7 @@
-module.exports = class musicPlayer {
-	main() {
-		console.log('hello world');
+// initialises a class
+module.exports = class MusicPlayer {
+	test() {
+		const test = 'hello world';
+		return test;
 	}
 };
