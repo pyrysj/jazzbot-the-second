@@ -1,10 +1,12 @@
-const { SlashCommandBuiler } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { mPlayer } = require('../index.js');
 
 module.exports = {
-	data: new SlashCommandBuiler()
+	data: new SlashCommandBuilder()
 		.setName('play')
-		.setDescription('This is a test command!'),
+		.setDescription('Command that makes jazzy tunes play.'),
 	async execute(interaction) {
-		await interaction.reply('just a test');
+		mPlayer.test();
+		return interaction.reply('Pong!');
 	},
 };
