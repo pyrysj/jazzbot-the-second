@@ -28,6 +28,12 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
+
+// creatres audio player -- will be tweaked eventually and customised for our needs
+const { createAudioPlayer } = require('@discordjs/voice');
+
+const player = createAudioPlayer();
+
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.data.name, command);
@@ -45,25 +51,19 @@ client.on('interactionCreate', async interaction => {
 	const { commandName } = interaction;
 
 	if (commandName == 'play') {
-		try {
-			const connection = joinVoiceChannel({
-				channelId: interaction.member.voice.channelId,
-				guildId: interaction.guildId,
-				adapterCreator: interaction.guild.voiceAdapterCreator,
-			});
+		const connection = joinVoiceChannel({
+			channelId: interaction.member.voice.channelId,
+			guildId: interaction.guildId,
+			adapterCreator: interaction.guild.voiceAdapterCreator,
+		});
 
-			const subscription = connection.subscribe(AudioPlayer);
+		const subscription = connection.subscribe(player);
 
-			if (subscription) {
-				// Unsubscribe after 5 seconds (stop playing audio on the voice connection)
-				setTimeout(() => subscription.unsubscribe(), 5_000);
-			}
-			await interaction.reply('Just a test for now');
+		if (subscription) {
+			// Unsubscribe after 5 seconds (stop playing audio on the voice connection)
+			setTimeout(() => subscription.unsubscribe(), 5_000);
 		}
-		catch (error) {
-			await interaction.reply('You need to be in a voice chat to play jazzy tunes.')
-		}
-
+		await interaction.reply('Just a test for now');
 	}
 
 	// code below commented out to first get the code working in one file - then to simplify
