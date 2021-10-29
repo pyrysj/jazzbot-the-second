@@ -1,7 +1,19 @@
 // Require the necessary discord.js classes
+// import Discord, { Interaction, GuildMember, Snowflake } from 'discord.js';
+// import {
+//	AudioPlayerStatus,
+//	AudioResource,
+//	enterState,
+//	joinVoiceChannel,
+//	VoiceConnectionStatus,
+// } from '@discordjs/voice';
+const { joinVoiceChannel, AudioPlayer } = require('@discordjs/voice');
 const { Client, Collection, Intents } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs');
+
+
+// let subscription = subscriptions.get(interaction)
 
 const m = require('./musicPlayer.js');
 const mPlayer = new m();
@@ -30,17 +42,43 @@ client.once('ready', () => {
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
-	const command = client.commands.get(interaction.commandName);
+	const { commandName } = interaction;
 
-	if (!command) return;
+	if (commandName == 'play') {
+		try {
+			const connection = joinVoiceChannel({
+				channelId: interaction.member.voice.channelId,
+				guildId: interaction.guildId,
+				adapterCreator: interaction.guild.voiceAdapterCreator,
+			});
 
-	try {
-		await command.execute(interaction);
+			const subscription = connection.subscribe(AudioPlayer);
+
+			if (subscription) {
+				// Unsubscribe after 5 seconds (stop playing audio on the voice connection)
+				setTimeout(() => subscription.unsubscribe(), 5_000);
+			}
+			await interaction.reply('Just a test for now');
+		}
+		catch (error) {
+			await interaction.reply('You need to be in a voice chat to play jazzy tunes.')
+		}
+
 	}
-	catch (error) {
-		console.error(error);
-		return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-	}
+
+	// code below commented out to first get the code working in one file - then to simplify
+	// by making it run in multiple files
+	// const command = client.commands.get(interaction.commandName);
+
+	// if (!command) return;
+
+	// try {
+//		await command.execute(interaction);
+//	}
+//	catch (error) {
+//		console.error(error);
+//		return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+//	}
 });
 
 // Login to Discord with your client's token
