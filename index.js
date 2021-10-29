@@ -1,33 +1,26 @@
-// Require the necessary discord.js classes
-// import Discord, { Interaction, GuildMember, Snowflake } from 'discord.js';
-// import {
-//	AudioPlayerStatus,
-//	AudioResource,
-//	enterState,
-//	joinVoiceChannel,
-//	VoiceConnectionStatus,
-// } from '@discordjs/voice';
 const { joinVoiceChannel, AudioPlayer } = require('@discordjs/voice');
 const { Client, Collection, Intents } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs');
-
 
 // let subscription = subscriptions.get(interaction)
 
 const m = require('./musicPlayer.js');
 const mPlayer = new m();
 
+// exports mPlayer so that we can access our code in the seperate command files eventually
+
 exports.mPlayer = mPlayer;
 
 // the code in this file is mostly based off the discord.js documentation
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES'] });
+
+// in its current state does nothing -- will eventually do stuff with seperate command files!
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
 
 // creatres audio player -- will be tweaked eventually and customised for our needs
 const { createAudioPlayer } = require('@discordjs/voice');
@@ -47,26 +40,35 @@ client.once('ready', () => {
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
-
 	const { commandName } = interaction;
-
 	if (commandName == 'play') {
-		const connection = joinVoiceChannel({
-			channelId: interaction.member.voice.channelId,
-			guildId: interaction.guildId,
-			adapterCreator: interaction.guild.voiceAdapterCreator,
-		});
-
-		const subscription = connection.subscribe(player);
-
-		if (subscription) {
-			// Unsubscribe after 5 seconds (stop playing audio on the voice connection)
-			setTimeout(() => subscription.unsubscribe(), 5_000);
+		// this here checks that the person is in a voice channel
+		if (interaction.member.voice.channelId != null) {
+			const connection = joinVoiceChannel({
+				channelId: interaction.member.voice.channelId,
+				guildId: interaction.guildId,
+				adapterCreator: interaction.guild.voiceAdapterCreator,
+			});
+	
+			const subscription = connection.subscribe(player);
+	
+			if (subscription) {
+				// Unsubscribe after 5 seconds (stop playing audio on the voice connection)
+				// this is where the initial part of playing music will be done, might just 
+				// look at interacting with the youtube api directly for an extra challenge
+				setTimeout(() => subscription.unsubscribe(), 5_000);
+			}
+			await interaction.reply('Just a test for now');			
 		}
-		await interaction.reply('Just a test for now');
+		else {
+			await interaction.reply('You need to be in a voice channel to use this command');
+		}
+
+
 	}
 
 	// code below commented out to first get the code working in one file - then to simplify
+	// the next step is to split into multiple files and make it easier to manage and modify!
 	// by making it run in multiple files
 	// const command = client.commands.get(interaction.commandName);
 
