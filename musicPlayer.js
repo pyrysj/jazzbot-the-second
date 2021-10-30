@@ -9,6 +9,8 @@ const opts = {
 	key: key,
 };
 
+// this file might get scrapped -- will need to see!
+
 // using just 0 for now, more fancy features could eventually be implemented
 
 // initialises a class
