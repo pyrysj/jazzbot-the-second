@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/pyrysj/jazzbot-the-second#readme",
   "devDependencies": {
-    "eslint": "^8.0.1"
+    "eslint": "^8.0.1",
+    "ts-node": "^10.4.0"
   },
   "dependencies": {
     "@discordjs/builders": "^0.6.0",

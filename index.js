@@ -1,4 +1,4 @@
-const { joinVoiceChannel, AudioPlayer } = require('@discordjs/voice');
+const { joinVoiceChannel, AudioPlayer, createAudioPlayer } = require('@discordjs/voice');
 const { Client, Collection, Intents } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs');
@@ -6,13 +6,6 @@ const fs = require('fs');
 // let subscription = subscriptions.get(interaction)
 
 const { Player } = require('./player.ts');
-
-// exports mPlayer so that we can access our code in the seperate command files eventually
-
-//exports.mPlayer = mPlayer;
-
-// the code in this file is mostly based off the discord.js documentation
-
 // Create a new client instance
 const client = new Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_VOICE_STATES'] });
 
@@ -20,11 +13,6 @@ const client = new Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_VOICE_S
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
-// creatres audio player -- will be tweaked eventually and customised for our needs
-//const { createAudioPlayer } = require('@discordjs/voice');
-
-//const player = createAudioPlayer();
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -44,26 +32,15 @@ client.on('interactionCreate', async interaction => {
 		// this here checks that the person is in a voice channel
 		if (interaction.member.voice.channelId != null) {
 			// need to think through it here
-			player = new Player("jazz", joinVoiceChannel({
+			const player = new Player("jazz", joinVoiceChannel({
 				channelId: interaction.member.voice.channelId,
 				guildId: interaction.guild,
 				adapterCreator: interaction.guild.voiceAdapterCreator,
 			}));
-
-			const connection = joinVoiceChannel({
-				channelId: interaction.member.voice.channelId,
-				guildId: interaction.guildId,
-				adapterCreator: interaction.guild.voiceAdapterCreator,
-			});
+			// probably will need to rename stuff to make code clearer - play as the function
+			// and as something used inside player.ts is kind of confusing, right?
+			player.play();
 	
-			const subscription = connection.subscribe(player);
-	
-			if (subscription) {
-				// Unsubscribe after 5 seconds (stop playing audio on the voice connection)
-				// this is where the initial part of playing music will be done, might just 
-				// look at interacting with the youtube api directly for an extra challenge
-				setTimeout(() => subscription.unsubscribe(), 5_000);
-			}
 			await interaction.reply('Just a test for now');			
 		}
 		else {
