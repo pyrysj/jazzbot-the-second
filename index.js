@@ -5,12 +5,11 @@ const fs = require('fs');
 
 // let subscription = subscriptions.get(interaction)
 
-const m = require('./musicPlayer.js');
-const mPlayer = new m();
+const { Player } = require('./player.ts');
 
 // exports mPlayer so that we can access our code in the seperate command files eventually
 
-exports.mPlayer = mPlayer;
+//exports.mPlayer = mPlayer;
 
 // the code in this file is mostly based off the discord.js documentation
 
@@ -23,9 +22,9 @@ client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 // creatres audio player -- will be tweaked eventually and customised for our needs
-const { createAudioPlayer } = require('@discordjs/voice');
+//const { createAudioPlayer } = require('@discordjs/voice');
 
-const player = createAudioPlayer();
+//const player = createAudioPlayer();
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -44,6 +43,13 @@ client.on('interactionCreate', async interaction => {
 	if (commandName == 'play') {
 		// this here checks that the person is in a voice channel
 		if (interaction.member.voice.channelId != null) {
+			// need to think through it here
+			player = new Player("jazz", joinVoiceChannel({
+				channelId: interaction.member.voice.channelId,
+				guildId: interaction.guild,
+				adapterCreator: interaction.guild.voiceAdapterCreator,
+			}));
+
 			const connection = joinVoiceChannel({
 				channelId: interaction.member.voice.channelId,
 				guildId: interaction.guildId,
