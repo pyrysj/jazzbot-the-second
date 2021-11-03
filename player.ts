@@ -1,4 +1,4 @@
-import { createAudioPlayer, AudioPlayer, VoiceConnection  } from "@discordjs/voice";
+import { createAudioPlayer, AudioPlayer, VoiceConnection,  } from "@discordjs/voice";
 // had to move to typescript, will hopefully be cleaned
 // up in future revisions, right now a pain to look through
 
@@ -16,8 +16,8 @@ export class Player {
     }
 
     play(): void {
+        console.log(this.searchArg);
         const subscription = this.connection.subscribe(player);
-
         if (subscription) {
             // Unsubscribe after 5 seconds (stop playing audio on the voice connection)
             // this is where the initial part of playing music will be done, might just 

@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { VoiceConnectionStatus, AudioPlayerStatus, getVoiceConnection, AudioPlayer } = require('@discordjs/voice');
 // const { ExplicitContentFilterLevels } = require('discord.js/typings/enums');
-const { mPlayer } = require('../index.js');
 
 
 module.exports = {
@@ -14,7 +13,6 @@ module.exports = {
 		try {
 			const connection = getVoiceConnection(interaction.member.voice.channelId);
 			const subscription = connection.subscribe(AudioPlayer);
-			mPlayer.play();
 		}
 		catch (error) {
 			interaction.reply('You need to be in a voice call to listen to jazzy tunes.');
