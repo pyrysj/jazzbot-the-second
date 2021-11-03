@@ -1,10 +1,20 @@
-import { createAudioPlayer, AudioPlayer, VoiceConnection,  } from "@discordjs/voice";
+import { createAudioPlayer, VoiceConnection,  } from "@discordjs/voice";
+import ytdl from 'ytdl-core';
+import search from 'youtube-search';
+import key = require('./config.json');
 // had to move to typescript, will hopefully be cleaned
 // up in future revisions, right now a pain to look through
 
-
-// Will eventually be tweaked
+// NB: means the audio player, not "our" player!
 const player = createAudioPlayer();
+
+// need to think about where to "tidily" store these options, mabye as a .json?
+// for now just something to get us going -- will eventually be made more sophisticated!
+let opts = {
+    maxResults: 25,
+    type: 'video',
+    videoDuration: 'long'
+}
 
 export class Player {
     searchArg: string;
@@ -15,6 +25,7 @@ export class Player {
         this.connection = connection;
     }
 
+    // function to play songs
     play(): void {
         console.log(this.searchArg);
         const subscription = this.connection.subscribe(player);
@@ -24,5 +35,10 @@ export class Player {
             // look at interacting with the youtube api directly for an extra challenge
             setTimeout(() => subscription.unsubscribe(), 5_000);
         }	
+    }
+    // function to eventually show currently playing song
+    // NB: will need to be coded in as a command, etc etc§
+    nowPlaying(): void {
+        console.log('TBI');
     }
 }

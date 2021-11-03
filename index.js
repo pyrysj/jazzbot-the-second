@@ -1,5 +1,5 @@
-const { joinVoiceChannel, AudioPlayer, createAudioPlayer } = require('@discordjs/voice');
-const { Client, Collection, Intents } = require('discord.js');
+const { joinVoiceChannel } = require('@discordjs/voice');
+const { Client, Collection } = require('discord.js');
 const { token } = require('./config.json');
 // const fs = require('fs');
 
@@ -30,17 +30,14 @@ client.on('interactionCreate', async interaction => {
 	if (commandName == 'play') {
 		// this here checks that the person is in a voice channel
 		if (interaction.member.voice.channelId != null) {
-			// need to think through it here
+			// passes necessary stuff for the creation of the player
 			const player = new Player('jazz', joinVoiceChannel({
 				channelId: interaction.member.voice.channelId,
 				guildId: interaction.guildId,
 				adapterCreator: interaction.guild.voiceAdapterCreator,
 			}));
-
 			player.play();
-			// const player = new Player('jazz', connection);
-			// probably will need to rename stuff to make code clearer - play as the function
-			// player.play();
+			// will eventually reply with a cool info box about the jazz that is playing
 			interaction.reply('Just a test for now');
 		}
 		else {
