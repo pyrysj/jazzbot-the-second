@@ -10,10 +10,10 @@ axios.get('https://www.googleapis.com/youtube/v3/search?', {
     }
     })
     .then(function (response) {
-        for (var i in response.items){
-
+        // iterates through the response we got and prints out video id
+        for (let i = 0; i<response.data.items.length; i++) {
+            console.log(response.data.items[i].id.videoId);
         }
-        #console.log(response);
       })
     .catch(function (error) {
         console.log(error);

@@ -11,7 +11,11 @@ axios_1["default"].get('https://www.googleapis.com/youtube/v3/search?', {
     }
 })
     .then(function (response) {
-    console.log(response);
+    console.log(response.data.items[0]);
+    for (var i = 0; i < response.data.items.length; i++) {
+        console.log(response.data.items[i].id.videoId);
+    }
+    //console.log(typeof(response.data))
 })["catch"](function (error) {
     console.log(error);
 })
