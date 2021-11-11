@@ -2,6 +2,7 @@ import { createAudioPlayer, VoiceConnection, createAudioResource } from "@discor
 import ytdl from 'ytdl-core';
 import youtubeSearch from "youtube-search";
 import config = require('./config.json');
+import { Search } from "./search";
 // had to move to typescript, will hopefully be cleaned
 // up in future revisions, right now a pain to look through
 
@@ -34,24 +35,17 @@ export class Player {
     // function to play songs
     play(): void {
         // just a basic player for now, does as described really
-        this.search("jazz");
+        const search = new Search();
+        const res = search.yt_search('jazz');
+        
+        res.then(function (result) {
+            console.log(result)
+        })
+        
         //onst subscription = this.connection.subscribe(player);
         //const stream = ytdl(this.songURL, { filter: 'audioonly', dlChunkSize: 0 });
         //const dispatcher = player.play(createAudioResource(stream));
     }
-
-    private search(searchArg: string): any {
-        let url = youtubeSearch(searchArg, opts, (err, results) => {
-            if(err) return console.log(err);
-            if (results){
-                return results[0].link;
-            }
-    
-        });
-        console.log(url)
-
-    }
-
     // function to eventually show currently playing song
     // NB: will need to be coded in as a command, etc etc§
     nowPlaying(): void {
