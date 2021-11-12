@@ -10,39 +10,32 @@ import { Search } from "./search";
 // will eventually be moved to another file? mabye? with customisations and 
 // everything
 const player = createAudioPlayer();
-
-// need to think about where to "tidily" store these options, mabye as a .json?
-// for now just something to get us going -- will eventually be made more sophisticated!
-var opts: youtubeSearch.YouTubeSearchOptions = {
-    maxResults: 10,
-    key: config.key
-}
-
-// tidy function to search and return the url of a result
-
+const search = new Search();
 
 export class Player {
     searchArg: string;
     connection : VoiceConnection;
-    songURL: string;
+    songURL: Promise<string>;
 
     constructor(searchArg: string, connection: VoiceConnection) {
         this.searchArg = searchArg;
         this.connection = connection;
-        this.songURL = ""
+        this.songURL = new Promise<string>((value)=>{
+            console.log(value)
+        })
     }
 
     // function to play songs
     play(): void {
         // just a basic player for now, does as described really
-        const search = new Search();
+
         const res = search.yt_search('jazz');
-        
+
         res.then(function (result) {
-            console.log(result)
+            return result
         })
         
-        //onst subscription = this.connection.subscribe(player);
+        //const subscription = this.connection.subscribe(player);
         //const stream = ytdl(this.songURL, { filter: 'audioonly', dlChunkSize: 0 });
         //const dispatcher = player.play(createAudioResource(stream));
     }
@@ -51,5 +44,6 @@ export class Player {
     nowPlaying(): void {
         console.log('TBI');
     }
+
 }
 
